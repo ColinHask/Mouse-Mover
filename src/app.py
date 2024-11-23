@@ -2,9 +2,14 @@ import sys
 import pyautogui as pag
 import random
 import time
+import win32api, win32con
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5 import QtGui
+
+#keeps program from stopping when cursor hits corner
+pag.FAILSAFE = False
 
 class AFKEngine(QObject):
 
@@ -22,21 +27,37 @@ class AFKEngine(QObject):
                 time.sleep(2)
             else:
                 print("MOVING")
+                #set random movement coordinates
                 x = random.randint(500,1000)
                 y = random.randint(200,600)
-                # duration = random.randint(0.1,1)
-                pag.moveTo(x, y, duration=0.2)
-                time.sleep(2)
+
+                #set random cursor speed max 7 sec
+                duration = random.randint(1,7)
+
+                #move at speed
+                pag.moveTo(x, y, duration=duration)
+                time.sleep(0.2)
+
+                #set random movement coordinates
+                x = random.randint(-500,500)
+                y = random.randint(-500,500)
+
+                #jump to location
+                win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y, 0, 0)
+
+                #set random wait
+                rand_time = random.randint(9,15)
+                time.sleep(rand_time)
 
     
     def pause(self):
         self.running = False
-        print("run_AFK stopped")
+        print("AFK stopped")
 
     
     def start(self):
         self.running = True
-        print("run_AFK started")
+        print("AFK started")
 
     #toggles AFK using button
     #slot acessed by GUIWindow button
@@ -54,6 +75,7 @@ class GUIWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Mouse Mover")
+        self.setWindowIcon(QtGui.QIcon('img\logo.png'))
 
         #create main label
         lbl = QLabel()
