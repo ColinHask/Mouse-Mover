@@ -87,10 +87,29 @@ class GUIWindow(QMainWindow):
         #connect button to toggling text func
         self.button.clicked.connect(self.toggle_button_text)
 
-        # create layout
+        #create advanced settings checkbox
+        self.advanced_checkbox = QCheckBox(text= "Advanced Settings")
+        self.advanced_checkbox.setCheckable(True)
+        self.advanced_checkbox.clicked.connect(self.toggle_advanced_settings)
+
+        # create layout for adv settings
+        self.advanced_layout = QGridLayout()
+        self.advanced_widget = QWidget()
+        self.advanced_widget.setVisible(False)
+        
+
+        # Adv settings sub widgets
+        gaming_checkbox = QCheckBox(text= "Gaming mode")
+        gaming_checkbox.setCheckable(True)
+        self.advanced_layout.addWidget(gaming_checkbox)
+        self.advanced_widget.setLayout(self.advanced_layout)
+
+        # create main layout
         layout = QVBoxLayout()
         layout.addWidget(lbl)
         layout.addWidget(self.button)
+        layout.addWidget(self.advanced_checkbox)
+        layout.addWidget(self.advanced_widget)
 
         #central widget takes up full space in window
         central_widget = QWidget()
@@ -121,6 +140,12 @@ class GUIWindow(QMainWindow):
             self.button.setText("STOP Mouse Movement")
         else:
             self.button.setText("START Mouse Movement")
+
+    def toggle_advanced_settings(self,s):
+        if self.advanced_checkbox.isChecked():
+            self.advanced_widget.setVisible(True)
+        else:
+            self.advanced_widget.setVisible(False)
             
 #setup main window, show window, and execute app            
 app = QApplication(sys.argv)
