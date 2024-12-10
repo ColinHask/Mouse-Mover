@@ -8,6 +8,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
 
+import sys
+import os
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
+# Usage
+icon_path = resource_path('../img/logo.png')
+
+
 #keeps program from stopping when cursor hits corner
 pag.FAILSAFE = False
 
@@ -98,7 +110,7 @@ class GUIWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Mouse Mover")
-        self.setWindowIcon(QtGui.QIcon('img\logo.png'))
+        self.setWindowIcon(QtGui.QIcon(icon_path))
 
         #create main label
         lbl = QLabel()
