@@ -157,7 +157,7 @@ class GUIWindow(QMainWindow):
         #create AFK engine obj as worker
         self.worker = AFKEngine()
 
-        #connect button clicking (signal) to worker toggle_AFK (slot)
+        #connect signals and slots
         self.button.clicked.connect(self.worker.toggle_AFK)
         self.advanced_checkbox.clicked.connect(self.worker.toggle_advanced)
         self.gaming_checkbox.clicked.connect(self.worker.toggle_gaming)
