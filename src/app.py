@@ -16,6 +16,8 @@ class AFKEngine(QObject):
     def __init__(self):
         super().__init__()
         self.running = False
+        self.advanced_mode = False
+        self.gaming_mode = False
 
     #moves user's mouse when activated, prints waiting when waiting
     #main loop for AFK engine
@@ -47,7 +49,16 @@ class AFKEngine(QObject):
 
                 #set random wait
                 rand_time = random.randint(9,15)
+                
+                #advanced mode and sub-modes
+                if self.advanced_mode:
+                    print("Advanced mode activated")
+                    if self.gaming_mode:
+                        #move wasd equal amounts
+                        print("Gaming mode running")
+
                 time.sleep(rand_time)
+
 
     
     def pause(self):
@@ -66,6 +77,18 @@ class AFKEngine(QObject):
             self.start()
         else:
             self.pause()
+    
+    def toggle_advanced(self,checked,):
+        if checked:
+            self.advanced_mode = True
+        else:
+            self.advanced_mode = False  
+
+    def toggle_gaming(self,checked,):
+        if checked:
+            self.gaming_mode = True
+        else:
+            self.gaming_mode = False  
             
 
 
@@ -90,7 +113,7 @@ class GUIWindow(QMainWindow):
         #create advanced settings checkbox
         self.advanced_checkbox = QCheckBox(text= "Advanced Settings")
         self.advanced_checkbox.setCheckable(True)
-        self.advanced_checkbox.clicked.connect(self.toggle_advanced_settings)
+        self.advanced_checkbox.clicked.connect(self.toggle_advanced_settings_vis)
 
         # create layout for adv settings
         self.advanced_layout = QGridLayout()
@@ -99,9 +122,9 @@ class GUIWindow(QMainWindow):
         
 
         # Adv settings sub widgets
-        gaming_checkbox = QCheckBox(text= "Gaming mode")
-        gaming_checkbox.setCheckable(True)
-        self.advanced_layout.addWidget(gaming_checkbox)
+        self.gaming_checkbox = QCheckBox(text= "Gaming mode")
+        self.gaming_checkbox.setCheckable(True)
+        self.advanced_layout.addWidget(self.gaming_checkbox)
         self.advanced_widget.setLayout(self.advanced_layout)
 
         # create main layout
@@ -124,6 +147,8 @@ class GUIWindow(QMainWindow):
 
         #connect button clicking (signal) to worker toggle_AFK (slot)
         self.button.clicked.connect(self.worker.toggle_AFK)
+        self.advanced_checkbox.clicked.connect(self.worker.toggle_advanced)
+        self.gaming_checkbox.clicked.connect(self.worker.toggle_gaming)
 
         #place worker into thread
         self.worker.moveToThread(self.thread)
@@ -141,7 +166,7 @@ class GUIWindow(QMainWindow):
         else:
             self.button.setText("START Mouse Movement")
 
-    def toggle_advanced_settings(self,s):
+    def toggle_advanced_settings_vis(self,s):
         if self.advanced_checkbox.isChecked():
             self.advanced_widget.setVisible(True)
         else:
