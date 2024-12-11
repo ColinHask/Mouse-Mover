@@ -68,6 +68,18 @@ class AFKEngine(QObject):
                     if self.gaming_mode:
                         #move wasd equal amounts
                         print("Gaming mode running")
+                        pag.keyDown('w')
+                        time.sleep(0.5)
+                        pag.keyUp('w')
+                        pag.keyDown('s')
+                        time.sleep(0.5)
+                        pag.keyUp('s')
+                        pag.keyDown('a')
+                        time.sleep(0.5)
+                        pag.keyUp('a')
+                        pag.keyDown('d')
+                        time.sleep(0.5)
+                        pag.keyUp('d')
 
                 time.sleep(rand_time)
 
@@ -136,8 +148,14 @@ class GUIWindow(QMainWindow):
         # Adv settings sub widgets
         self.gaming_checkbox = QCheckBox(text= "Gaming mode")
         self.gaming_checkbox.setCheckable(True)
+        self.time_label = QLabel(text= "Set Movement Interval (seconds):")
+        self.time_entry = QLineEdit()
+
         self.advanced_layout.addWidget(self.gaming_checkbox)
+        self.advanced_layout.addWidget(self.time_label)
+        self.advanced_layout.addWidget(self.time_entry)
         self.advanced_widget.setLayout(self.advanced_layout)
+
 
         # create main layout
         layout = QVBoxLayout()
